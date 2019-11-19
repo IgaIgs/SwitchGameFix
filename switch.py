@@ -182,7 +182,7 @@ class Switch:
         # otherwise either suit or value has to match with top card
         else:
             top_card = self.discards[-1]
-            return card.suit == top_card.suit and card.value == top_card.value
+            return card.suit == top_card.suit or card.value == top_card.value
 
     def draw_and_discard(self, player):
         """Draw a card from stock and discard it if possible.

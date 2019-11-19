@@ -1,5 +1,16 @@
 # CHANGELOG
 
+
+* v1.1.4 [2019-11-19]: Bug fix release.
+    - Fixed bug in switch.py's can_discard() function:
+    
+    --> The condition for whether a card can be discarded contained a mistake: instead of the card having to follow
+    'suit' OR 'value' of the top card in the discard pile, the condition was set to AND, which prevented valid cards 
+    from being discarded
+    
+    --> Changed 'and' to 'or' in the condition for discard: `else: top_card = self.discards[-1]
+      return card.suit == top_card.suit or card.value == top_card.value`
+
 * v1.1.3 [2019-11-19]: Bug fix release.
   - Fixed bug in switch.py's pick_up_card() function:
   
