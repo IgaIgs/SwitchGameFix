@@ -1,5 +1,15 @@
 # CHANGELOG
 
+* v1.1.7 [2019-19-11]: Bug fix release:
+  - Fixed a bug in switch.py card_discard() for the game effect of card with value 'King'.
+  
+  --> Card 'King' should reverse the game direction but the condition in the above function was giving back the same 
+  direction without any change due to a misuse of '*=' (self.direction was being multiplied by 1, which made no change).
+  
+  --> Changed the value of multiplication from 1 to -1 to allow for reversing the direction of the game:
+   `elif card.value == 'K':
+            self.direction *= -1`
+
 * v1.1.6 [2019-11-19]: Bug (and typo) fix release:
   - Corrected the typo in CHANGELOG.md in the v.1.1.5 version (lacked 'v')
   - Fixed a bug in switch.py discard_card() function for the condition where card with value '2' is discarded
