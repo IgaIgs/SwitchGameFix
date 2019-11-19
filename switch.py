@@ -77,7 +77,8 @@ class Switch:
         self.discards = [self.stock.pop()]
         # deal hands
         for player in self.players:
-            self.pick_up_card(player, HAND_SIZE)
+            self.pick_up_card(player, HAND_SIZE+1)  # add 1 to the HAND_SIZE parameter to allow the 'in range' method
+            # from the 'pick_up_card' function below to assign 7 cards to each players hands instead of 6
         # set game flags to initial value
         self.direction = 1
         self.skip = False
@@ -158,7 +159,7 @@ class Switch:
         # repeat n times
         for i in range(1, n):
             # if no more card in stock pile
-            if not self.stock:
+            if not self.stock:  # changed from if not self.stock
                 # add back discarded cards (but not top card)
                 if len(self.discards) == 1:
                     UI.print_message("All cards distributed")
