@@ -1,6 +1,15 @@
 # CHANGELOG
 
-* 1.1.5 [2019-11-19]: Bug fix release.
+* v1.1.6 [2019-11-19]: Bug (and typo) fix release:
+  - Corrected the typo in CHANGELOG.md in the v.1.1.5 version (lacked 'v')
+  - Fixed a bug in switch.py discard_card() function for the condition where card with value '2' is discarded
+  
+  --> The condition was supposed to make the next player draw 2 cards if the previous player discarded a '2' card. 
+  However, the card value in this condition was '4' which obviously prevented the correct working of this function.
+  
+  --> Changed the card value from '4' to '2'.
+ 
+* v1.1.5 [2019-11-19]: Bug fix release.
   - Fixed a bug in test_switch.py in test_can_discard__allows_ace()
   
   --> One of the asserts was a King card instead of Ace, therefore it was Failed
