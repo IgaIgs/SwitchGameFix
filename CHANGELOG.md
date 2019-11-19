@@ -1,5 +1,12 @@
 # CHANGELOG
 
+* v1.1.8 [2019-19-11]: Bug fix release:
+  - Fixed a bug in switch.py in run_player() function for executing the self.skip method.
+  
+  --> The `self.skip == False` statement had no effect.
+  
+  --> Changed to `self.skip = False`.
+
 * v1.1.7 [2019-19-11]: Bug fix release:
   - Fixed a bug in switch.py card_discard() for the game effect of card with value 'King'.
   

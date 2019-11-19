@@ -103,7 +103,7 @@ class Switch:
         # apply any pending penalties (skip, draw2, draw4)
         if self.skip:
             # return without performing any discard
-            self.skip == False
+            self.skip = False
             UI.print_message('{} is skipped.'.format(player.name))
         elif self.draw2:
             # draw two cards
