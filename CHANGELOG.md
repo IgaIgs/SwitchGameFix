@@ -1,5 +1,11 @@
 # CHANGELOG
 
+* 1.1.5 [2019-11-19]: Bug fix release.
+  - Fixed a bug in test_switch.py in test_can_discard__allows_ace()
+  
+  --> One of the asserts was a King card instead of Ace, therefore it was Failed
+  
+  --> Changed 'K' in card value to 'A': `assert s.can_discard(Card('♠', 'A'))`
 
 * v1.1.4 [2019-11-19]: Bug fix release.
     - Fixed bug in switch.py's can_discard() function:
