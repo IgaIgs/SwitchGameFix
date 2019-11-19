@@ -1,5 +1,16 @@
 # CHANGELOG
 
+* v1.1.9 [2019-19-11]: Bug fix release:
+  - Fixed a bug in switch.py in get_normalized_hand_sizes(self, player) function for reordering the list of players hand 
+  sizes depending on chosen player.
+  
+  --> The list of normalized hand sizes was not properly displaying the chosen player's hand as the first in the list
+  followed by all players after him (in game direction) because the code: `sizes = sizes[:idx] + sizes[idx:]` was basically
+  only printing every hand size before and after the chosen player.
+  
+ --> Changed this line to: `sizes = sizes[idx:idx] + sizes[idx:] + sizes[:idx]`. Now the list includes the hand size of 
+ the chosen player first and then all the next players' after him and before him (in that order, to make a whole circle)
+
 * v1.1.8 [2019-19-11]: Bug fix release:
   - Fixed a bug in switch.py in run_player() function for executing the self.skip method.
   
