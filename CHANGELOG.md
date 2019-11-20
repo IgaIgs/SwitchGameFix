@@ -1,6 +1,16 @@
 # CHANGELOG
 
-* v1.1.9 [2019-19-11]: Bug fix release:
+* v1.1.10 [2019-11-20]: Bug and typo fix release:
+  - Fixed the typo in CHANGELOG.md update dates for the versions v.1.1.7-9 (month switched with day)
+  - Fixed a bug in switch.py in run_player function in the discardable value
+  
+  --> The call to self.can_discard was working incorrectly resulting in cards being discarded even though they shouldn't
+  
+  --> Instead of using self.can_discard, specified what a discardable card is again based on what the current top card
+  in the discard pile is: `discardable = [card for card in player.hand if card.value in 'QA' or 
+  card.suit == top_card.suit or card.value == top_card.value]`
+
+* v1.1.9 [2019-11-19]: Bug fix release:
   - Fixed a bug in switch.py in get_normalized_hand_sizes(self, player) function for reordering the list of players hand 
   sizes depending on chosen player.
   
@@ -11,14 +21,14 @@
  --> Changed this line to: `sizes = sizes[idx:idx] + sizes[idx:] + sizes[:idx]`. Now the list includes the hand size of 
  the chosen player first and then all the next players' after him and before him (in that order, to make a whole circle)
 
-* v1.1.8 [2019-19-11]: Bug fix release:
+* v1.1.8 [2019-11-19]: Bug fix release:
   - Fixed a bug in switch.py in run_player() function for executing the self.skip method.
   
   --> The `self.skip == False` statement had no effect.
   
   --> Changed to `self.skip = False`.
 
-* v1.1.7 [2019-19-11]: Bug fix release:
+* v1.1.7 [2019-11-19]: Bug fix release:
   - Fixed a bug in switch.py card_discard() for the game effect of card with value 'King'.
   
   --> Card 'King' should reverse the game direction but the condition in the above function was giving back the same 
