@@ -1,5 +1,14 @@
 # CHANGELOG
 
+* v1.1.11 [2019-11-20]: Bug fix and documentation changes release:
+  - Added some more details to v1.1.8 bug fix report.
+  - Fixed a bug in switch.py's run_player function for self.draw2 and self.draw4 conditions
+  
+  --> `self.draw2 == False` and `self.draw4 == False` statements were checking the equivalency of the values on the 
+  right and left sides of `==` instead of setting the right values to False.
+  
+  --> Changed `==` to `=` in both statements.
+
 * v1.1.10 [2019-11-20]: Bug and typo fix release:
   - Fixed the typo in CHANGELOG.md update dates for the versions v.1.1.7-9 (month switched with day)
   - Fixed a bug in switch.py in run_player function in the discardable value
@@ -24,7 +33,8 @@
 * v1.1.8 [2019-11-19]: Bug fix release:
   - Fixed a bug in switch.py in run_player() function for executing the self.skip method.
   
-  --> The `self.skip == False` statement had no effect.
+  --> The `self.skip == False` statement had no effect: it was only checking the equivalency of self.skip and False, 
+  not actually setting self.skip to False.
   
   --> Changed to `self.skip = False`.
 
