@@ -1,5 +1,9 @@
 # CHANGELOG
 
+* v1.1.12 [2019-11-21]: Improvements in the documentation release:
+  - Completed docstrings to Card class in cards.py
+  - Added docstrings for Player class in players.py
+
 * v1.1.11 [2019-11-20]: Bug fix and documentation changes release:
   - Added some more details to v1.1.8 bug fix report.
   - Fixed a bug in switch.py's run_player function for self.draw2 and self.draw4 conditions

@@ -3,6 +3,21 @@ import user_interface as UI
 
 
 class Player:
+    """This is a class for all real players playing the game.
+
+    Constructor:
+    __init__(self,name):
+        :param name: Name of the player.
+        :param hand: Current cards in player's hand.
+
+    Attributes:
+    name -- name of the player
+    hand -- cards in the hand of the player
+
+    Methods:
+    select_card -- display player's card choices
+    ask_for_swap -- display who player asked for a swap
+    """
     is_ai = False
 
     def __init__(self, name):
@@ -10,6 +25,11 @@ class Player:
         self.hand = []
 
     def select_card(self, choices, _):
+        """Display what cards did the player choose from his hand.
+
+        :param choices: Card chosen by the player.
+        :return: Choices made by the player.
+        """
         return UI.select_card(choices)
 
     def ask_for_swap(self, others):
@@ -47,7 +67,7 @@ class SmartAI(SimpleAI):
 
             return offset.get(card.value, in_suit)
 
-        sorted_choices = sorted(choices, key=score, reverse=True
+        sorted_choices = sorted(choices, key=score, reverse=True)
         candidate = sorted_choices[0]
         return candidate if score(candidate) > -2 else None
 
