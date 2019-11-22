@@ -4,21 +4,58 @@ from cards import Card
 
 
 class MockPlayer:
+    """This is a class for AI players created just for the sake of running the tests.
+
+    The players in this class always select the 1st possible choice in every situation.
+
+    Attributes:
+        name -- 'Mock player'
+        hand -- hand of the mock player
+
+    Methods: same as for real players but the choice is limited to whatever card or player is first.
+    """
     is_ai = True
 
     def __init__(self, hand):
+        """Constructor of the Mock Player class
+
+        Parameters:
+            name -- 'Mock player' is the name of all the mock players
+        """
         self.name = "Mock player"
         self.hand = hand
 
     def select_card(self, choices, hands):
+        """Select the first card in hand."""
         return choices[0]
 
     def ask_for_swap(self, others):
+        """Swap hands with the first player."""
         return others[0]
 
 
 def mock_setup_round(hands, stock, discards,
                      skip=False, draw2=False, draw4=False, direction=1):
+    """Setup a mock round of the switch game.
+
+    Starts a round of switch game by handing out cards to each of the mock players's hands,
+    creating a stock pile and a discard pile. It also assigns all the game effects from switch.py
+    module to new values which are used in this test file.
+
+    Parameters:
+        hands -- cards in each of the player's hand
+        stock -- cards in the stock pile
+        discards -- cards in the discard pile
+
+    Keyword arguments:
+        skip -- game effect when the next person in line is skipped
+        draw2 -- game effect when the next person draws 2 cards
+        draw4 -- game effect when the next person draws 4 cards
+        direction -- the direction of the game
+
+    Returns:
+        A new mock round of the switch game.
+    """
     def str_to_cards(spec):
         return [Card(sv[:1], sv[1:]) for sv in spec.split()]
 
@@ -34,7 +71,7 @@ def mock_setup_round(hands, stock, discards,
 
 
 def test_setup_round__resets_flags():
-    """setup_round sets all flags to initial value"""
+    """Check whether the setup_round sets all flags to their initial values."""
     s = switch.Switch()
     s.players = [MockPlayer([]), MockPlayer([])]
     s.setup_round()
@@ -45,7 +82,7 @@ def test_setup_round__resets_flags():
 
 
 def test_setup_round__deals_cards():
-    """setup_round deals correct number of cards"""
+    """Check if setup_round deals correct number of cards."""
     s = switch.Switch()
     s.players = [MockPlayer([]), MockPlayer([])]
     s.setup_round()
@@ -55,7 +92,7 @@ def test_setup_round__deals_cards():
 
 
 def test_pick_up_card__pick_correct_number():
-    """pick_up_card picks up correct number of cards"""
+    """Check if pick_up_card picks up correct number of cards."""
     s = mock_setup_round(['♣4', '♣9'], '♠7 ♢8 ♠5 ♢6 ♢7', '♠5 ♢6 ♡3')
     player = s.players[0]
     picked = s.pick_up_card(player, 4)
@@ -70,6 +107,7 @@ def test_pick_up_card__pick_correct_number():
 
 
 def test_can_discard__follows_suit():
+    """Check if can_discard properly judges which card is discardable by suit."""
     s = mock_setup_round([], '', '♣5')
     assert s.can_discard(Card('♣', '2'))
     assert s.can_discard(Card('♣', '3'))
@@ -84,6 +122,7 @@ def test_can_discard__follows_suit():
 
 
 def test_can_discard__follows_value():
+    """Check if can_discard properly judges which card is discardable by value."""
     s = mock_setup_round([], '', '♣5')
     assert s.can_discard(Card('♢', '5'))
     assert s.can_discard(Card('♡', '5'))
@@ -91,6 +130,7 @@ def test_can_discard__follows_value():
 
 
 def test_can_discard__allows_ace():
+    """Check if can_discard treats all Ace cards as always discardable."""
     s = mock_setup_round([], '', '♣5')
     assert s.can_discard(Card('♢', 'A'))
     assert s.can_discard(Card('♡', 'A'))
@@ -98,6 +138,7 @@ def test_can_discard__allows_ace():
 
 
 def test_can_discard__allows_queen():
+    """Check if can_discard treats all Queen cards as always discardable."""
     s = mock_setup_round([], '', '♣5')
     assert s.can_discard(Card('♢', 'Q'))
     assert s.can_discard(Card('♡', 'Q'))
@@ -105,24 +146,28 @@ def test_can_discard__allows_queen():
 
 
 def test_discard_card__sets_skip():
+    """Check if discard_card sets switch.skip after card with value 8 has been discarded."""
     s = mock_setup_round(['♣4 ♡8', '♣9'], '♢5 ♢6 ♢7 ♢8', '♡3')
     s.discard_card(s.players[0], Card('♡', '8'))
     assert s.skip
 
 
 def test_discard_card__sets_draw2():
+    """Check if can_discard makes the next player draw 2 cards after a card of value 2 has been discarded. """
     s = mock_setup_round(['♣4 ♡2', '♣9'], '♢5 ♢6 ♢7 ♢8', '♡3')
     s.discard_card(s.players[0], Card('♡', '2'))
     assert s.draw2
 
 
 def test_discard_card__sets_draw4():
+    """Check if can_discard makes the next player draw 4 cards after a card of value 4 has been discarded. """
     s = mock_setup_round(['♣4 ♡Q', '♣9'], '♢5 ♢6 ♢7 ♢8', '♡3')
     s.discard_card(s.players[0], Card('♡', 'Q'))
     assert s.draw4
 
 
 def test_discard_card__reverses():
+    """Check if discard_card reverses the game direction after a Kind card has been discarded."""
     s = mock_setup_round(['♣4 ♡K', '♣K ♣9'], '♢5 ♢6 ♢7 ♢8', '♡3')
     s.discard_card(s.players[0], Card('♡', 'K'))
     assert s.direction == -1
@@ -131,6 +176,7 @@ def test_discard_card__reverses():
 
 
 def test_discard_card__swaps():
+    """Check if discard_card forces a hand swap between players after Jack card has been discarded."""
     s = mock_setup_round(['♣4 ♡J', '♣K ♣9'], '♢5 ♢6 ♢7 ♢8', '♡3')
     s.discard_card(s.players[0], Card('♡', 'J'))
     assert s.players[0].hand == [Card('♣', 'K'), Card('♣', '9')]
@@ -138,7 +184,7 @@ def test_discard_card__swaps():
 
 
 def test_get_normalized_hand_sizes():
-    """test hand size normalization"""
+    """Check the correctness of hand size normalization."""
     s = mock_setup_round(['♣4', '♣K ♣9', '♡J ♢5 ♢6'], '♢7 ♢8', '♡3')
     assert s.get_normalized_hand_sizes(s.players[0]) == [1, 2, 3]
     assert s.get_normalized_hand_sizes(s.players[1]) == [2, 3, 1]
@@ -151,7 +197,7 @@ def test_get_normalized_hand_sizes():
 
 
 def test_swap_hands():
-    """Test swapping of hands"""
+    """Check if the hand swap is working right."""
     s = mock_setup_round(['♣4', '♣K ♣9', '♡J ♢5 ♢6'], '♢7 ♢8', '♡3')
     s.swap_hands(s.players[1], s.players[2])
     assert len(s.players[1].hand) == 3
@@ -159,7 +205,7 @@ def test_swap_hands():
 
 
 def test_run_player__adheres_to_skip_flag():
-    """run_player adheres to switch.skip"""
+    """Check if run_player adheres to switch.skip game effect."""
     from copy import deepcopy
     s = mock_setup_round(['', '', ''], '', '♣3', skip=True)
     player = s.players[1]
@@ -170,7 +216,7 @@ def test_run_player__adheres_to_skip_flag():
 
 
 def test_run_player__adheres_to_draw2_flag():
-    """run_player adheres to switch.draw2"""
+    """Check if run_player adheres to switch.draw2"""
     s = mock_setup_round(['', ''], '♢5 ♣6 ♣7', '♢3', draw2=True)
     player = s.players[1]
     s.run_player(player)
@@ -179,7 +225,7 @@ def test_run_player__adheres_to_draw2_flag():
 
 
 def test_run_player__adheres_to_draw4_flag():
-    """run_player adheres to switch.draw4"""
+    """Check if run_player adheres to switch.draw4"""
     s = mock_setup_round(['', ''], '♢5 ♣5 ♣6 ♣7 ♣8', '♢3', draw4=True)
     player = s.players[1]
     s.run_player(player)
@@ -188,7 +234,7 @@ def test_run_player__adheres_to_draw4_flag():
 
 
 def test_run_player__returns_true_upon_win():
-    """run_player returns True if player wins"""
+    """Check if run_player returns True if player wins"""
     s = mock_setup_round(['♣4 ♣5', '♣9', '♣10'], '♣6 ♣7 ♣8', '♣3')
     player = s.players[0]
     assert not s.run_player(player)
@@ -196,7 +242,7 @@ def test_run_player__returns_true_upon_win():
 
 
 def test_run_player__draws_card():
-    """run_player forces pick up if no discard possible"""
+    """Check if run_player forces pick up if no discard possible"""
     s = mock_setup_round(['♣4', '♣9'], '♢5 ♢6 ♢7 ♢8', '♡3')
     player = s.players[0]
     s.run_player(player)
@@ -206,7 +252,7 @@ def test_run_player__draws_card():
 
 
 def test_run_player__draws_card_and_discards():
-    """run_player discards drawn card if possible"""
+    """Check if run_player discards drawn card if possible"""
     s = mock_setup_round(['♣4', '♣9'], '♢5 ♢6 ♢7 ♡8', '♡3')
     player = s.players[0]
     s.run_player(player)

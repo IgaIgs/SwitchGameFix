@@ -9,7 +9,7 @@ HAND_SIZE = 7
 
 
 class Switch:
-    """The switch game
+    """The switch game.
 
     To run the game, create a Switch object and call its run_game method:
 
@@ -21,14 +21,14 @@ class Switch:
 
     self.players -- list of Player objects
     self.stock -- list of cards to draw from
-    self.discards -- list of disracded cards
+    self.discards -- list of discarded cards
     self.skip -- bool indicating that the next player is skipped
     self.draw2 -- bool indicating that the next player must draw 2 cards
     self.draw4 -- bool indicating that the next player must draw 4 cards
     self.direction -- int, either 1 or -1 indicating direction of play.
     """
     def run_game(self):
-        """Run rounds of the game until player decides to exist."""
+        """Run rounds of the game until player decides to exit."""
         UI.say_welcome()
         # show game menu and run rounds until player decides to exit
         while True:
@@ -45,14 +45,14 @@ class Switch:
     def run_round(self):
         """Runs a single round of switch.
 
-        Contineously calls Switch.run_player for the current player,
+        Continuously calls Switch.run_player for the current player,
         and advances the current player depending on current direction
         of play.
         """
         # deal cards etc.
         self.setup_round()
 
-        i = 0 # current player index
+        i = 0  # current player index
         while True:
             # process current player's turn 
             won = self.run_player(self.players[i])
@@ -87,18 +87,18 @@ class Switch:
     def run_player(self, player):
         """Process a single player's turn.
 
-        Parameters:
-        player -- Player to make the turn
-
-        Returns:
-        True if the game continues, otherwise False.
-
         In each turn, game effects are applied according to the outcome
         of the last turn. The player is then asked to select a card
         via a call to Player.select_card which is then discarded via
         a call to discard_card. If the player has no discardable card
         (or chooses voluntarily not to discard), draw_and_discard is
         called to draw from stock.
+
+        Parameters:
+        player -- Player to make the turn
+
+        Returns:
+        True if the game continues, otherwise False.
         """
         # apply any pending penalties (skip, draw2, draw4)
         if self.skip:
@@ -131,16 +131,21 @@ class Switch:
         if card:
             # discard card and determine whether player has won
             self.discard_card(player, card)
-            # if all cards discarded, return True
-            return not player.hand
+            # if all cards discarded, return False
+            return player.hand
         else:
             # draw and (potentially) discard
             self.draw_and_discard(player)
             # player still has cards and the game goes on
-            return False
+            return True
 
     def pick_up_card(self, player, n=1):
         """Pick card from stock and add to player hand.
+
+        Picks n cards from the stock pile and adds it to the player
+        hand. If the stock has less than n cards, all but the top most
+        discard are shuffled back into the stock. If this is still not
+        sufficient, the maximum possible number of cards is picked.
 
         Parameters:
         player -- Player who picks the card
@@ -150,11 +155,6 @@ class Switch:
 
         Returns:
         number of cards actually picked
-
-        Picks n cards from the stock pile and adds it to the player
-        hand. If the stock has less than n cards, all but the top most
-        discard are shuffled back into the stock. If this is still not
-        sufficient, the maximum possible number of cards is picked.
         """
         # repeat n times
         for i in range(1, n+1):
@@ -176,7 +176,14 @@ class Switch:
         return i
 
     def can_discard(self, card):
-        """Return whether card can be discarded onto discard pile."""
+        """Return whether card can be discarded onto discard pile.
+
+        Parameters:
+            card -- the card checked whether it's discardable
+
+        Returns:
+            True if discardable.
+        """
         # queens and aces can always be discarded
         if card.value in 'QA':
             return True
@@ -188,12 +195,12 @@ class Switch:
     def draw_and_discard(self, player):
         """Draw a card from stock and discard it if possible.
 
-        Parameters:
-        player -- the Player that draws the card
-
-        calls pick_up_card to obtain a stock card and adds it to the
+        Calls pick_up_card to obtain a stock card and adds it to the
         player's hand. If the card can be discarded, discard_card is
         called with the newly picked card.
+
+        Parameters:
+        player -- the Player that draws the card
         """
         UI.print_message("No matching card. Drawing ...")
         # return if no card could be picked
@@ -244,15 +251,15 @@ class Switch:
     def get_normalized_hand_sizes(self, player):
         """Return list of hand sizes in normal form
 
+        The list of hand sizes is rotated and flipped so that the
+        specified player is always at position 0 and the next player
+        (according to current direction of play) at position 1.
+
         Parameter:
         player -- Player for whom to normalize view
 
         Returns:
-        list of integers of sample length than players
-
-        The list of hand sizes is rotated and flipped so that the
-        specified player is always at position 0 and the next player
-        (according to current direction of play) at position 1.
+        list of integers representing lengths of players' hands.
         """
         sizes = [len(p.hand) for p in self.players]
         idx = self.players.index(player)
@@ -266,7 +273,12 @@ class Switch:
         return sizes
 
     def swap_hands(self, p1, p2):
-        """Exchanges the hands of the two given players."""
+        """Exchanges the hands of the two given players.
+
+        Parameters:
+            p1 -- one of the players participating in the hand swap
+            p2 -- the other player participating in the hand swap
+        """
         p1.hand, p2.hand = p2.hand, p1.hand
         UI.print_message('{} swaps hands with {}.'.format(p1.name, p2.name))
 

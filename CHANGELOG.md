@@ -1,5 +1,9 @@
 # CHANGELOG
 
+* v1.1.14 [2019-11-22]: Improvements in the documentation release:
+  - Completed docstrings for test_switch.py, user_interface.py and switch.py.
+  - Corrected couple of typos in switch.py
+
 * v.1.1.13 [2019-11-22]: Improvements in the documentation release:
   - Improved docstrings in cards.py
   - Improved and completed docstrings in players.py
