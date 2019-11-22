@@ -1,7 +1,11 @@
 # CHANGELOG
 
+* v.1.1.13 [2019-11-22]: Improvements in the documentation release:
+  - Improved docstrings in cards.py
+  - Improved and completed docstrings in players.py
+
 * v1.1.12 [2019-11-21]: Improvements in the documentation release:
-  - Completed docstrings to Card class in cards.py
+  - Completed docstrings for Card class in cards.py
   - Added docstrings for Player class in players.py
 
 * v1.1.11 [2019-11-20]: Bug fix and documentation changes release:
