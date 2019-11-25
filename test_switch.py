@@ -167,7 +167,7 @@ def test_discard_card__sets_draw4():
 
 
 def test_discard_card__reverses():
-    """Check if discard_card reverses the game direction after a Kind card has been discarded."""
+    """Check if discard_card reverses the game direction after a King card has been discarded."""
     s = mock_setup_round(['♣4 ♡K', '♣K ♣9'], '♢5 ♢6 ♢7 ♢8', '♡3')
     s.discard_card(s.players[0], Card('♡', 'K'))
     assert s.direction == -1

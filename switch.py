@@ -11,7 +11,7 @@ HAND_SIZE = 7
 class Switch:
     """The switch game.
 
-    To run the game, create a Switch object and call its run_game method:
+    To run the game, run the run_switch.py module or create a Switch object and call its run_game method:
 
     >>> game = Switch()
     >>> game.run_game()
@@ -54,13 +54,15 @@ class Switch:
 
         i = 0  # current player index
         while True:
-            # process current player's turn 
+            # process current player's turn
+            if i == len(self.players) or i == (-(len(self.players))):
+                i = 0
             won = self.run_player(self.players[i])
             if won:
                 break
             else:
                 # advance player index depending on self.direction
-                i = i+self.direction % len(self.players)
+                i = i+self.direction
         UI.print_winner_of_game(self.players[i])
 
     def setup_round(self):
@@ -98,13 +100,14 @@ class Switch:
         player -- Player to make the turn
 
         Returns:
-        True if the game continues, otherwise False.
+        True if a player continues and the game stops, otherwise False and the game continues.
         """
         # apply any pending penalties (skip, draw2, draw4)
         if self.skip:
             # return without performing any discard
             self.skip = False
             UI.print_message('{} is skipped.'.format(player.name))
+            return None
         elif self.draw2:
             # draw two cards
             picked = self.pick_up_card(player, 2)
@@ -131,13 +134,19 @@ class Switch:
         if card:
             # discard card and determine whether player has won
             self.discard_card(player, card)
-            # if all cards discarded, return False
-            return player.hand
+            # if all cards discarded, return True
+            if len(player.hand) == 0:
+                return True
+            else:
+                return False
         else:
             # draw and (potentially) discard
             self.draw_and_discard(player)
-            # player still has cards and the game goes on
-            return True
+            # check if player still has cards and if the game goes on
+            if len(player.hand) == 0:
+                return True
+            else:
+                return False
 
     def pick_up_card(self, player, n=1):
         """Pick card from stock and add to player hand.

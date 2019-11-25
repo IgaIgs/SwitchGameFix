@@ -1,5 +1,32 @@
 # CHANGELOG
 
+* v1.1.15 [2019-11-25]: Bug fix, documentation improvement and playable game release:
+  - Created a game running module run_switch.py for clearer access to playing Switch.
+  - Some minor changes in switch.py docstrings and a typo in test_switch.py
+  - Fixed bugs in switch.py's run_round function :
+   
+   --> As the round progressed, the index of a player would go beyond the maximum list of players' indexes which is [0,1,2,3].
+   
+   --> Added a condition `if i == len(self.players) or i == (-(len(self.players))): i = 0`for when it reaches the limit,
+   the index count will go back to the beginning (index = 0) to enable for multiple rounds of the game.
+   
+   --> Also, deleted an unnecessary condition for moving from one index to the next: % len(self.players) which was
+   causing the game to crash.
+   
+  - Fixed bugs in run_player function in switch.py:
+  
+  --> The self.skip condition in run_player was only displaying a print statement without actually having any effect on the game.
+  
+  --> Fixed by putting a 'return None' statement in the condition.
+  
+  - Fixed bug for winner condition in run_player
+
+  --> The winner of the game was chosen inadequately to the run of the round and to their hand because of 
+  a lacking condition for winner in run_player.
+  
+  --> Added `if len(player.hand) == 0:` condition to make sure the winner is chosen only when they have discarded all 
+  the cards from their hand.
+
 * v1.1.14 [2019-11-22]: Improvements in the documentation release:
   - Completed docstrings for test_switch.py, user_interface.py and switch.py.
   - Corrected couple of typos in switch.py
